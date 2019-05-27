@@ -1,7 +1,7 @@
 # ReactFlagNotification
 It is a flag notification that shows up in the bottom left side of the screen. It comes with royalty free icons. 
 
-#Props 
+# Props 
 
 | Prop  | DEFAULTS |
 | --- | --- | 

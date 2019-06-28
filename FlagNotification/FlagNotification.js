@@ -33,6 +33,7 @@ class FlagNotification extends Component {
       failColor: "rgba(212, 63, 58,0.95)",
       infoColor: "rgba(0,0,0,0.95",
     }
+    this.timer = null;
   }
   componentDidMount() {
     try {
@@ -45,17 +46,30 @@ class FlagNotification extends Component {
     }
   }
   componentWillUnmount() {}
-
+  componentDidUpdate(){
+    clearTimeout(this.timer);
+ }
   setVisibility = () => {
-    this.props.onFlagEnd()
+    console.log("setting fade out: ",this.state.fadedIn)
+    this.setState({
+      fadedIn: false,
+    }, () =>{
+      this.props.onFlagEnd()
+    })
+    
   }
 
   setFadedIn = () => {
-    setTimeout(
+
+    this.timer=setTimeout(
       function() {
-        this.setState({
-          fadedIn: true,
-        })
+        console.log("setting fade in",this.state.fadedIn)
+        if(this.state.fadedIn!==true&&this.props.isVisible===true){
+          this.setState({
+            fadedIn: true,
+          })
+        }
+       
       }.bind(this),
       this.props.flagTime * 500
     )
@@ -234,7 +248,7 @@ FlagNotification.defaultProps = {
   isVisible: true,
   flagType: "info",
   message: "Notice Given",
-  flagTime: 5,
+  flagTime: 8,
   onFlagEnd: function() {},
 }
 

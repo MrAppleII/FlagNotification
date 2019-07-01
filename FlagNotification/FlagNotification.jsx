@@ -1,8 +1,6 @@
 import React, { Component } from "react"
 import styled, { keyframes } from "styled-components"
 import PropTypes from "prop-types"
-import ReactDOM from "react-dom"
-
 import successLogo from "./icons/successLogo.svg"
 import alertLogo from "./icons/alertLogo.svg"
 import failedLogo from "./icons/failedLogo.svg"
@@ -26,12 +24,13 @@ class FlagNotification extends Component {
     this.state = {
       flagColor: "#000",
       iconUrl: infoLogo,
-      photoSize: 40,
+      photoSize: 18,
       fadedIn: false,
-      alertColor: "rgba(240, 173, 78,0.95)",
-      successColor: "rgba(92, 184, 92,0.95)",
-      failColor: "rgba(212, 63, 58,0.95)",
-      infoColor: "rgba(0,0,0,0.95",
+      alertColor: "rgba(240, 173, 78,1.0)",
+      successColor: "rgba(92, 184, 92,1.0)",
+      failColor: "rgba(212, 63, 58,1.0)",
+      infoColor: "rgba(255, 236, 6,1.0",
+      isFlagVisible:true,
     }
     this.timer = null;
   }
@@ -45,25 +44,34 @@ class FlagNotification extends Component {
       }
     }
   }
-  componentWillUnmount() {}
-  componentDidUpdate(){
-    clearTimeout(this.timer);
- }
+  componentWillUnmount() {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+  }
+  
   setVisibility = () => {
-    console.log("setting fade out: ",this.state.fadedIn)
     this.setState({
       fadedIn: false,
+      isFlagVisible:false,
     }, () =>{
-      this.props.onFlagEnd()
-    })
+      console.log("About to fire FlagEnd!")
+        this.props.onFlagEnd()
+      })
+     
     
   }
 
   setFadedIn = () => {
+    var time = 0;
+    if(this.props.flagTime){
+     time =  this.props.flagTime * 500
+    }else{
+     time =  6 * 500
 
+    }
     this.timer=setTimeout(
       function() {
-        console.log("setting fade in",this.state.fadedIn)
         if(this.state.fadedIn!==true&&this.props.isVisible===true){
           this.setState({
             fadedIn: true,
@@ -71,24 +79,24 @@ class FlagNotification extends Component {
         }
        
       }.bind(this),
-      this.props.flagTime * 500
+      time
     )
   }
 
   setFlagInfo = props => {
     if ("info".match(props.flagType) || "Info".match(props.flagType)) {
-      this.setFlagParams(this.state.infoColor, infoLogo, 40)
+      this.setFlagParams(this.state.infoColor, infoLogo, this.state.photoSize)
     } else if ("alert".match(props.flagType) || "Alert".match(props.flagType)) {
-      this.setFlagParams(this.state.alertColor, alertLogo, 40)
+      this.setFlagParams(this.state.alertColor, alertLogo, this.state.photoSize)
     } else if (
       "success".match(props.flagType) ||
       "Success".match(props.flagType)
     ) {
-      this.setFlagParams(this.state.successColor, successLogo, 40)
+      this.setFlagParams(this.state.successColor, successLogo, this.state.photoSize)
     } else if ("fail".match(props.flagType) || "Fail".match(props.flagType)) {
-      this.setFlagParams(this.state.failColor, failedLogo, 40)
+      this.setFlagParams(this.state.failColor, failedLogo, this.state.photoSize)
     } else {
-      this.setFlagParams(this.state.infoColor, infoLogo, 40) //This is the default flag
+      this.setFlagParams(this.state.infoColor, infoLogo, this.state.photoSize) //This is the default flag
     }
   }
   setFlagParams = (color, url, size) => {
@@ -106,8 +114,8 @@ class FlagNotification extends Component {
 
   render() {
     try {
-      return this.props.isVisible
-        ? ReactDOM.createPortal(
+      return this.state.isFlagVisible
+        ? 
             !this.state.fadedIn ? (
               <FlagContainer
                 className="show"
@@ -143,9 +151,8 @@ class FlagNotification extends Component {
                   <MessageText>{this.props.message}</MessageText>
                 </Col>
               </FlagContainer>
-            ),
-            document.body
-          )
+            )
+           
         : null
     } catch (e) {
       if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
@@ -159,58 +166,66 @@ class FlagNotification extends Component {
 const FadeIn = keyframes`
 from {
   opacity: 0.2;
-  transform: translateY(100%);
+  transform:  translateY(100%) ;
  
 } 
 to {
-  transform: translateY(0%);
+  transform:  translateY(0%);
 opacity: 1.0;
 }
 `
 const FadeOut = keyframes`
 from {
-  transform: translateY(0%);
+  transform:  translateY(0%) ;
   opacity: 1.0;
 } 
 to {
-  transform: translateY(100%);
+  transform:  translateY(100%) ;
   opacity: 0;
   
 }
 `
 
-const MessageText = styled.div`
-  margin-left: 8px;
+const MessageText = styled.span`
+line-height:0.9em;
+  font-size:0.9em;
+  align-self:center;
+  margin-right:0.3em;
+  font-weight:400;
 `
 const FlagContainer = styled.div`
   /* Fonts */
   font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
-  color: #fff;
+  color: #000;
 
   /* Visibility and Opacity */
   visibility: hidden;
-
+  z-index: 999999 ;
+  width:auto;
   /* Appearence */
-  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-    0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
-  margin: 12px;
-  padding: 8px;
-  border-radius: 2px;
-
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  margin: 14px 0px;
+  padding: 8px 9px;
+  border-radius: 8px;
+  border-style: solid;
+  border-width:0px;
+  border-color:rgba(0,0,0,0.05);
   /* Item Alignment */
+  transition: width .3s, top .4s,bottom .3s;
   flex-wrap: wrap;
   align-items: center;
+  box-sizing: border-box;
+  pointer-events: all;
 
   /* Positioning */
-  position: fixed;
+  display:table;
+  position: relative;
   z-index: 999;
-  left: 24px;
-  right: auto;
-  bottom: 24px;
-
-  will-change: transform, opacity, bottom;
-
+  cursor: pointer;
+  
+  will-change: transform, opacity;
+  
   &.show {
     visibility: visible;
 
@@ -220,22 +235,25 @@ const FlagContainer = styled.div`
     visibility: visible;
     animation: ${FadeOut} 0.25s;
   }
-
-  @media (min-width: 300px) {
-    flex-grow: initial;
-    min-width: 288px;
+  :hover{
+    opacity:0.7;
   }
+ 
 `
 
 const Col = styled.span`
   position: relative;
   display: flex;
   align-items: center;
+  justify-content:flex-start;
+  vertical-align:baseline;
+
 `
 // This is the positioning for the image itself. 
 const AlertImg = styled.img`
-  margin-top: auto;
-  margin-bottom: auto;
+  align-self:center;
+  align-content:center;
+  margin-right:0.3em;
 `
 FlagNotification.propTypes = {
   flagType: PropTypes.string,
@@ -248,7 +266,7 @@ FlagNotification.defaultProps = {
   isVisible: true,
   flagType: "info",
   message: "Notice Given",
-  flagTime: 8,
+  flagTime: 16,
   onFlagEnd: function() {},
 }
 

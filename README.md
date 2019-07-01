@@ -10,3 +10,20 @@ It is a flag notification that shows up in the bottom left side of the screen. I
 |message: PropTypes.string,   | Default is "Notice Given". It is the message that is meant to be displayed to the user. |
 |flagTime: PropTypes.number,  | Sets how long to display the flag for in miliseconds. The default is 8 |
 |onVisibilityEnd: PropTypes.func, | This a function that is called at the end of the notification dissapearing. Default is nothing.|
+
+# Example Usage 
+
+```
+import {FlagContainer,FlagManager} from '../../FlagNotification/'
+ createNotification = async() => {
+    console.log("Attempting...")
+
+    
+      FlagManager.alert("Wrong! Please enter correct password! Hello here is a really long message!");
+     
+  };
+  render() {
+ <FlagContainer/>
+ }
+
+```

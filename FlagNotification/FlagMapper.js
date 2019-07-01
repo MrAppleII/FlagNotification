@@ -24,10 +24,10 @@ render() {
       return (
       <Container>
           {this.props.notifications.map((notification) => {
-            const key = notification.id ;
+           // const key = notification.id ;
             return (
               <Flag
-                key={key}
+                key={notification.id}
                 flagType={notification.type}
                 message={notification.message}
                 flagTime={notification.flagTime}

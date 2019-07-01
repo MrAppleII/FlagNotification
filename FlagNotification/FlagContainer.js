@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import styled, { keyframes } from "styled-components"
+import styled from "styled-components"
 
 import ReactDOM from "react-dom"
 import FlagManager from './FlagManager'

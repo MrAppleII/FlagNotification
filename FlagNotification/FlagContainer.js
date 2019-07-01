@@ -26,7 +26,7 @@ HandleFlagChange = (notifications) =>{
 }
 HandleRemoveFlag = (notification) =>{
   //Let us remove the flag from the list of flags.
-  console.log("Attempting to remove(Container)...")
+ // console.log("Attempting to remove(Container)...")
 
   FlagManager.remove(notification)
 }

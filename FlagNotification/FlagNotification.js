@@ -55,7 +55,7 @@ class FlagNotification extends Component {
       fadedIn: false,
       isFlagVisible:false,
     }, () =>{
-      console.log("About to fire FlagEnd!")
+//console.log("About to fire FlagEnd!")
         this.props.onFlagEnd()
       })
      

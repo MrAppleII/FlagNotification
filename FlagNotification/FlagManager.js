@@ -30,7 +30,7 @@ class FlagManager extends EventEmitter {
     const defaultNotify = {
         id: createID(), // Make a generic ID for the Flag
       };
-    console.log("Created Flag")
+   // console.log("Created Flag")
     this.noticationList.push(Object.assign(defaultNotify, notification));
     this.emitChange();
   }
@@ -64,7 +64,7 @@ class FlagManager extends EventEmitter {
   }
   remove(notification) {
     this.noticationList = this.noticationList.filter(n => notification.id !== n.id);
-    console.log("Attempting to remove(Manager)...")
+    //console.log("Attempting to remove(Manager)...")
     this.emitChange();
   }
 

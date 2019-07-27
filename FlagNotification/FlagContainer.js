@@ -16,6 +16,7 @@ componentWillMount() {
   FlagManager.addChangeListener(this.HandleFlagChange)
 }
 componentWillUnmount() {
+  FlagManager.clearCache()
   FlagManager.removeChangeListener(this.HandleFlagChange)
 
 }

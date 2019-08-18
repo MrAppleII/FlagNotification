@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import styled, { keyframes } from "styled-components"
 import PropTypes from "prop-types"
+import cancelIcon from './icons/cancel_Icon.svg'
 import successLogo from "./icons/successLogo.svg"
 import alertLogo from "./icons/alertLogo.svg"
 import failedLogo from "./icons/failedLogo.svg"
@@ -15,7 +16,7 @@ import infoLogo from "./icons/infoLogo.svg"
   flagType: PropTypes.string,  Sets the kind of alter to display. Can be "alert","success","info", and "fail"
   isVisible: PropTypes.bool,   Default is true. Sets if it is visible. When set to true, it will stay open until the prop is false.
   message: PropTypes.string,   Default is "Notice Given". It is the message that is meant to be displayed to the user. 
-  flagTime: PropTypes.number,  Sets how long to display the flag for in miliseconds. The default is 5
+  flagTime: PropTypes.number,  Sets how long to display the flag for in milliseconds. The default is 5
   onVisibilityEnd: PropTypes.func, This a function that is called at the end of the notification animation.
 */
 class FlagNotification extends Component {
@@ -24,12 +25,12 @@ class FlagNotification extends Component {
     this.state = {
       flagColor: "#000",
       iconUrl: infoLogo,
-      photoSize: 18,
+      photoSize: 12,
       fadedIn: false,
       alertColor: "rgba(240, 173, 78,1.0)",
       successColor: "rgba(92, 184, 92,1.0)",
       failColor: "rgba(212, 63, 58,1.0)",
-      infoColor: "rgba(255, 236, 6,1.0",
+      infoColor: "rgba(46,109,255,1)",
       isFlagVisible:true,
     }
     this.timer = null;
@@ -120,35 +121,38 @@ class FlagNotification extends Component {
               <FlagContainer
                 className="show"
                 onAnimationEnd={this.setFadedIn}
-                style={{ backgroundColor: this.state.flagColor }}
+               borderColor=  {this.state.flagColor}
                 onClick={this.handleFlagClick}
               >
                 <Col>
+                
+
+                  <MessageText>{this.props.message}</MessageText>
                   <AlertImg
-                    src={this.state.iconUrl}
+                    src={cancelIcon}
                     width={this.state.photoSize}
                     height={this.state.photoSize}
                     alt="status logo"
                   />
-
-                  <MessageText>{this.props.message}</MessageText>
                 </Col>
               </FlagContainer>
             ) : (
               <FlagContainer
                 onAnimationEnd={this.setVisibility}
                 className="hide"
-                style={{ backgroundColor: this.state.flagColor }}
+                borderColor=  {this.state.flagColor}
+
               >
                 <Col>
+                 
+
+                  <MessageText>{this.props.message}</MessageText>
                   <AlertImg
-                    src={this.state.iconUrl}
+                    src={cancelIcon}
                     width={this.state.photoSize}
                     height={this.state.photoSize}
                     alt="status logo"
                   />
-
-                  <MessageText>{this.props.message}</MessageText>
                 </Col>
               </FlagContainer>
             )
@@ -166,53 +170,56 @@ class FlagNotification extends Component {
 const FadeIn = keyframes`
 from {
   opacity: 0.2;
-  transform:  translateY(100%) ;
+  transform:  translateX(100%) ;
  
 } 
 to {
-  transform:  translateY(0%);
+  transform:  translateX(0%);
 opacity: 1.0;
 }
 `
 const FadeOut = keyframes`
 from {
-  transform:  translateY(0%) ;
+  transform:  translateX(0%) ;
   opacity: 1.0;
 } 
 to {
-  transform:  translateY(100%) ;
+  transform:  translateX(100%) ;
   opacity: 0;
   
 }
 `
 
 const MessageText = styled.span`
-line-height:0.9em;
+line-height:1.2em;
   font-size:0.9em;
   align-self:center;
-  margin-right:0.3em;
+  margin-right:auto;
   font-weight:400;
 `
 const FlagContainer = styled.div`
   /* Fonts */
   font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
-  color: #000;
+  color: rgba(27,27,27,1);
 
   /* Visibility and Opacity */
   visibility: hidden;
   z-index: 999999 ;
-  width:auto;
+  width:300px;
   /* Appearence */
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-  margin: 14px 0px;
-  padding: 8px 9px;
-  border-radius: 8px;
-  border-style: solid;
-  border-width:0px;
-  border-color:rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.15);
+  margin: 8px 0px;
+  padding: 12px 10px;
+  border-radius: 1px;
+  border-left: 4px solid ${ props => (props.borderColor?  props.borderColor : `rgb(255,255,255)`) };
+  background:white;
+  overflow:hidden;
+
+
   /* Item Alignment */
-  transition: width .3s, top .4s,bottom .3s;
+  will-change: translate, opacity;
+  transition: width 0.3s ease-out, top 0.4s  ease-out,bottom 0.3s  ease-out;
   flex-wrap: wrap;
   align-items: center;
   box-sizing: border-box;
@@ -220,11 +227,15 @@ const FlagContainer = styled.div`
 
   /* Positioning */
   display:table;
+  flex-shrink:1;
+  /* Set this to margin right auto so it sits on the right of the screen */
+  margin-left:auto;
   position: relative;
   z-index: 999;
+  align-self:flex-start;
   cursor: pointer;
   
-  will-change: transform, opacity;
+ 
   
   &.show {
     visibility: visible;
@@ -235,9 +246,7 @@ const FlagContainer = styled.div`
     visibility: visible;
     animation: ${FadeOut} 0.25s;
   }
-  :hover{
-    opacity:0.7;
-  }
+  
  
 `
 
@@ -247,13 +256,20 @@ const Col = styled.span`
   align-items: center;
   justify-content:flex-start;
   vertical-align:baseline;
+  min-height:2.2em;
+
 
 `
 // This is the positioning for the image itself. 
 const AlertImg = styled.img`
-  align-self:center;
+  align-self:flex-start;
   align-content:center;
-  margin-right:0.3em;
+  margin-right:0em;
+  transition: all 0.3s ease-out;
+
+  :hover{
+    opacity:0.3;
+  }
 `
 FlagNotification.propTypes = {
   flagType: PropTypes.string,
@@ -265,7 +281,7 @@ FlagNotification.propTypes = {
 FlagNotification.defaultProps = {
   isVisible: true,
   flagType: "info",
-  message: "Notice Given",
+  message: "",
   flagTime: 16,
   onFlagEnd: function() {},
 }

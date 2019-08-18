@@ -17,8 +17,8 @@ const FlagTypes = {
 class FlagManager extends EventEmitter {
   constructor(props) {
     super(props)
-
-    this.noticationList = []
+    this.currentContainerID = -1
+    this.notificationList = []
   }
 
   componentDidMount() {}
@@ -28,15 +28,14 @@ class FlagManager extends EventEmitter {
     const defaultNotify = {
       id: createID(), // Make a generic ID for the Flag
     }
-    // console.log("Created Flag")
     var maxSize = 7
-    if(this.noticationList.length===maxSize){
+    if(this.notificationList.length===maxSize){
       //First pop one
-      this.noticationList.pop()
+      this.notificationList.shift()
 
     }
 
-    this.noticationList.push(Object.assign(defaultNotify, notification))
+    this.notificationList.push(Object.assign(defaultNotify, notification))
     this.emitChange()
   }
   info(message, flagTime) {
@@ -68,23 +67,18 @@ class FlagManager extends EventEmitter {
     })
   }
   clearCache() {
-    this.noticationList.length = 0
-
-    while (this.noticationList.length > 0) {
-      this.noticationList.pop()
-    }
+    this.notificationList = []
     this.emitChange()
   }
   remove(notification) {
-    this.noticationList = this.noticationList.filter(
+    this.notificationList = this.notificationList.filter(
       n => notification.id !== n.id
     )
-    //console.log("Attempting to remove(Manager)...")
     this.emitChange()
   }
 
   emitChange() {
-    this.emit(FlagTypes.CHANGE, this.noticationList)
+    this.emit(FlagTypes.CHANGE, this.notificationList)
   }
 
   addChangeListener(callback) {
@@ -93,6 +87,23 @@ class FlagManager extends EventEmitter {
 
   removeChangeListener(callback) {
     this.removeListener(FlagTypes.CHANGE, callback)
+  }
+  containerUnmounting(){
+   this.clearCache()
+  }
+  updateContainerID(containerID){
+    /*
+      Update the ID of the current container.
+      If there are multiple container, we will only push to the last
+      one created. 
+    */
+    this.currentContainerID = containerID
+    this.emitChange()
+    /*
+      We should clear the cache now, this prevents duplicate flags.
+    */
+   this.clearCache()
+   
   }
 }
 export default new FlagManager()

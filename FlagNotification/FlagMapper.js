@@ -2,7 +2,13 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import Flag from './FlagNotification'
 import styled from "styled-components"
-
+/*
+  File: FlagMapper.js
+  Description: Creates an array of JSX FlagContainer to be displayed.
+  It uses the unique ID generated for the keys in the array. These are 
+  displayed in the corner. When a flag is closed, the prop function
+  "handleFlagClose" is called.
+  */
 class FlagMapper extends Component {
     constructor(props) {
       super(props)
@@ -10,12 +16,9 @@ class FlagMapper extends Component {
 
     }
 }
-componentDidMount() {}
-componentWillUnmount() {}
-
 handleFlagClose = notification => () => {
   
-        this.props.handleFlagClose(notification);
+    this.props.handleFlagClose(notification);
    
   }
 
@@ -24,7 +27,6 @@ render() {
       return (
       <Container>
           {this.props.notifications.map((notification) => {
-           // const key = notification.id ;
             return (
               <Flag
                 key={notification.id}
@@ -55,8 +57,12 @@ FlagMapper.defaultProps = {
 }
 const Container  = styled.div`
 transition-duration:2s;
-  transition-property:all;
-  z-index: 999;
+transition-property:all;
+z-index: 999;
+display:flex;
+flex-direction:column;
+
+
 
 `
 export default FlagMapper

@@ -19,15 +19,19 @@ class FlagContainer extends Component {
       this.state = {
         notifications: [],
         containerID: createID(),
+        activeContainer: -1,
     }
 }
 componentDidMount() {
   FlagManager.addChangeListener(this.HandleFlagChange)
+  FlagManager.addContainerChangeListener(this.handleUpdateContainerChange)
   FlagManager.updateContainerID(this.state.containerID)
+
 }
 componentWillUnmount() {
-  FlagManager.containerUnmounting()
+  FlagManager.containerUnmounting(this.state.containerID)
   FlagManager.removeChangeListener(this.HandleFlagChange)
+  FlagManager.removeContainerChangeListener(this.handleUpdateContainerChange)
 
 }
 HandleFlagChange = (notifications) =>{
@@ -38,10 +42,19 @@ HandleFlagChange = (notifications) =>{
 HandleRemoveFlag = (notification) =>{
   FlagManager.remove(notification)
 }
-
+handleUpdateContainerChange = (containerId) =>{
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+    if(this.state.containerID!==containerId){
+      console.warn("There are at least two flag containers mounted, flags will only be posted to last one mounted. To prevent bugs, mount only one container per active screen.")
+    }
+  }
+  this.setState({
+    activeContainer:containerId
+  })
+}
 render() {
     try {
-      return (
+      return this.state.activeContainer===this.state.containerID? (
         ReactDOM.createPortal( 
           <InnerContainer >
             <FlagMap
@@ -50,7 +63,7 @@ render() {
       />
           </InnerContainer>
      ,document.body)
-      ) 
+      ) : null
     } catch (e) {
       if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
         console.log(e)

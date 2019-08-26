@@ -83,13 +83,30 @@ class FlagManager extends EventEmitter {
 
   addChangeListener(callback) {
     this.addListener(FlagTypes.CHANGE, callback)
+
+  }
+  addContainerChangeListener(callback){
+    this.addListener('updateContainerId', callback)
   }
 
   removeChangeListener(callback) {
     this.removeListener(FlagTypes.CHANGE, callback)
   }
-  containerUnmounting(){
-   this.clearCache()
+  removeContainerChangeListener(callback){
+    this.removeListener('updateContainerId', callback)
+
+  }
+  containerUnmounting(containerID){
+    if(containerID===this.currentContainerID){
+      this.clearCache()
+    }
+  }
+  /*
+    This updates the latest container id and emits to the containers
+    to prevent duplicate flags from showing up.
+  */
+  emitContainerIdUpdate(){
+    this.emit('updateContainerId',this.currentContainerID)
   }
   updateContainerID(containerID){
     /*
@@ -98,7 +115,7 @@ class FlagManager extends EventEmitter {
       one created. 
     */
     this.currentContainerID = containerID
-    this.emitChange()
+    this.emitContainerIdUpdate()
     /*
       We should clear the cache now, this prevents duplicate flags.
     */

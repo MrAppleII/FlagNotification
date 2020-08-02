@@ -81,7 +81,6 @@ const InnerContainer = styled.div`
 position:fixed;
 z-index: 999;
 min-width:0;
-height:0;
 overflow-x: visible;
 overflow-y: visible;
 pointer-events: none;
@@ -90,10 +89,10 @@ pointer-events: none;
 display:flex;
 flex-direction:column;  
 align-content:flex-end;
-top:0;
-right:0;
+bottom:20px;
+left:50%;
 padding-top:0px;
-margin-right:5px;
+
 
 
 

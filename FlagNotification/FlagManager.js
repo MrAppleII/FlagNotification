@@ -38,33 +38,106 @@ class FlagManager extends EventEmitter {
     this.notificationList.push(Object.assign(defaultNotify, notification))
     this.emitChange()
   }
-  info(message, flagTime) {
-    this.createFlag({
-      type: FlagTypes.INFO,
-      message,
-      flagTime,
-    })
+  info(message, detail, flagTimeLength) {
+    if(typeof(detail)==="string"){
+      // That means the user mean to have a detail in there
+      let flagTime = flagTimeLength
+      this.createFlag({
+        type: FlagTypes.INFO,
+        message,
+        detail,
+        flagTime,
+      })
+    }else if(typeof(detail)==="number"){
+      // This means there is no detail prop
+      let flagTime = flagTimeLength
+      this.createFlag({
+        type: FlagTypes.INFO,
+        message,
+        flagTime,
+      })
+    }else{
+      this.createFlag({
+        type: FlagTypes.INFO,
+        message
+      })
+    }
+    
   }
-  success(message, flagTime) {
-    this.createFlag({
-      type: FlagTypes.SUCCESS,
-      message,
-      flagTime,
-    })
+  success(message, detail, flagTimeLength) {
+    if(typeof(detail)==="string"){
+      // That means the user mean to have a detail in there
+      let flagTime = flagTimeLength
+      this.createFlag({
+        type: FlagTypes.SUCCESS,
+        message,
+        detail,
+        flagTime,
+      })
+    }else if(typeof(detail)==="number"){
+      // This means there is no detail prop
+      let flagTime = flagTimeLength
+      this.createFlag({
+        type: FlagTypes.SUCCESS,
+        message,
+        flagTime,
+      })
+    }else{
+      this.createFlag({
+        type: FlagTypes.SUCCESS,
+        message
+      })
+    }
   }
-  fail(message, flagTime) {
-    this.createFlag({
-      type: FlagTypes.FAIL,
-      message,
-      flagTime,
-    })
+  fail(message, detail, flagTimeLength) {
+    if(typeof(detail)==="string"){
+      // That means the user mean to have a detail in there
+      let flagTime = flagTimeLength
+      this.createFlag({
+        type: FlagTypes.FAIL,
+        message,
+        detail,
+        flagTime,
+      })
+    }else if(typeof(detail)==="number"){
+      // This means there is no detail prop
+      let flagTime = flagTimeLength
+      this.createFlag({
+        type: FlagTypes.FAIL,
+        message,
+        flagTime,
+      })
+    }else{
+      this.createFlag({
+        type: FlagTypes.FAIL,
+        message
+      })
+    }
   }
-  alert(message, flagTime) {
-    this.createFlag({
-      type: FlagTypes.ALERT,
-      message,
-      flagTime,
-    })
+  alert(message, detail, flagTimeLength) {
+    if(typeof(detail)==="string"){
+      // That means the user mean to have a detail in there
+      let flagTime = flagTimeLength
+      this.createFlag({
+        type: FlagTypes.ALERT,
+        message,
+        detail,
+        flagTime,
+      })
+    }else if(typeof(detail)==="number"){
+      // This means there is no detail prop
+      let flagTime = flagTimeLength
+      this.createFlag({
+        type: FlagTypes.ALERT,
+        message,
+        flagTime,
+      })
+    }else{
+      this.createFlag({
+        type: FlagTypes.ALERT,
+        message
+      })
+    }
   }
   clearCache() {
     this.notificationList = []

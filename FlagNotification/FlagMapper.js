@@ -30,6 +30,7 @@ render() {
             return (
               <Flag
                 key={notification.id}
+                detail={notification.detail}
                 flagType={notification.type}
                 message={notification.message}
                 flagTime={notification.flagTime}

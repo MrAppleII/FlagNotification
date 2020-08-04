@@ -1,6 +1,6 @@
 # ReactFlagNotification
 Its a small library for creating notifications/flags for users for React. Written in Typescript and very easy to get up and running. Feel free to use it however 
-you like. Customise it or just use it as it. 
+you like. Customize it or just use it as it. 
 
 # Flag Container Props 
 The flag container can take a few props to change the position of the flags as well as other styling. 

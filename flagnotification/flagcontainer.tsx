@@ -8,8 +8,23 @@ import Notification from "./types/notification";
 interface IProps {
   className?: string;
   position?: string;
+  style?: React.CSSProperties;
 }
-const FlagContainer: React.FC<IProps> = ({ className = "", position = "" }) => {
+/**
+ * @name FlagContainer
+ * @description Flags that created will displayed inside of this container. Please only put one
+ * per page.
+ * @prop {string} className Pass in a classname if you'd like to further customize the container
+ * using css classes.
+ * @prop {string} position By default the container is in the center. You can set it to different positions
+ * using combinations like "top right" or "bottom left". It accepts "top", "bottom", "right", "left"
+ * @prop {React.CSSProperties} style If you would like to customize the container using style objects just pass it in as a prop.
+ */
+const FlagContainer: React.FC<IProps> = ({
+  className = "",
+  position = "",
+  style,
+}) => {
   const [containerID] = useState(createID());
   const [activeContainer, setActiveContainer] = useState("-1");
   const [notifications, setNotifications] = useState([] as Notification[]);
@@ -45,7 +60,7 @@ const FlagContainer: React.FC<IProps> = ({ className = "", position = "" }) => {
 
   return activeContainer === containerID
     ? ReactDOM.createPortal(
-        <InnerContainer className={position + className}>
+        <InnerContainer style={style} className={position + className}>
           <FlagMap
             notifications={notifications}
             handleFlagClose={handleRemoveFlag}

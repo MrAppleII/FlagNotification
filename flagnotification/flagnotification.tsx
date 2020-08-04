@@ -17,7 +17,6 @@ interface FlagNotificationProps extends Notification {
  * @prop {string} message This is the message that will displayed to the user.
  * @prop {string} detail This will be displayed below the message.
  * @prop {number} flagTime This sets how long the flag will be displayed.
- * @prop {void} onVisibilityEnd This function is called after the flag is done being displayed.
  *
  */
 const FlagNotification: React.FC<FlagNotificationProps> = ({
